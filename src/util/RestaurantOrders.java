@@ -1,12 +1,17 @@
-package kg.attractor.java.homework;
-
+package util;
 import com.google.gson.Gson;
-import kg.attractor.java.homework.domain.Order;
+import domain.Customer;
+import domain.Order;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import static java.util.stream.Collectors.groupingBy;
+
 
 public class RestaurantOrders {
     // Этот блок кода менять нельзя! НАЧАЛО!
@@ -31,6 +36,11 @@ public class RestaurantOrders {
     public List<Order> getOrders() {
         return orders;
     }
+
+//    private static class List<T> {
+//
+//
+//    }
     // Этот блок кода менять нельзя! КОНЕЦ!
 
     //----------------------------------------------------------------------
@@ -42,4 +52,11 @@ public class RestaurantOrders {
     // для решения заданий из домашки :)
     // вы можете добавлять все необходимые imports
     //
+
+    public Map<Customer, List<Order>> getOrdersGroupedByCustomer(List<Order> orders) {
+        return orders.stream()
+                .collect(groupingBy(Order::getCustomer));
+    }
+
 }
+

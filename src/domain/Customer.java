@@ -1,4 +1,4 @@
-package kg.attractor.java.homework.domain;
+package domain;
 
 import java.util.Objects;
 
@@ -41,3 +41,4 @@ public class Customer {
 
 
 }
+
