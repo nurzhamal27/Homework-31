@@ -2,6 +2,7 @@ package domain;
 import util.NotImplementedException;
 
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -54,37 +55,32 @@ public class Order {
 
     public void calculateTotal() {
         throw new NotImplementedException("Вам надо реализовать этот метод!");
-        try {
-            var total = items.stream()
-                    .mapToDouble(Item::getPrice)
-                    .sum();
-            System.out.println(total);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        var total = items.stream()
+                .mapToDouble(item -> item.getPrice() * item.getAmount())
+                .sum();
+        System.out.println(total);
     }
 
 
 
-    public void printOrders(List<Order> orders) {
+    public void printOrders() {
         var printOrders = items.stream()
                 .map(Item :: getAmount)
                 .collect(toList());
         printOrders.forEach(System.out::println);
     }
 
-    public List<Order> getTopNOrders(List<Order> orders, int n) {
-        return orders.stream()
-                .sorted((o1, o2) -> Double.compare(o2.getTotal(), o1.getTotal()))
-                .limit(n)
+    public void getTopNOrders(List<Order> orders) {
+        List<Order> topOrders = orders.stream()
+                .sorted(comparingDouble(Order::getTotal).reversed())
+                .limit(200)
                 .collect(toList());
-
     }
 
-    public List<Order> getLowNOrders(List<Order> orders, int n) {
-        return orders.stream()
-                .sorted((o1, o2) -> Double.compare(o1.getTotal(), o2.getTotal()))
-                .limit(n)
+    public void getLowNOrders(List<Order> orders) {
+        List<Order> lowOrders = orders.stream()
+                .sorted(comparingDouble(Order::getTotal))
+                .limit(10)
                 .collect(toList());
     }
 
@@ -95,13 +91,11 @@ public class Order {
 
     }
 
-
     public void findMostAndLeastProfitableOrdersForHomeDelivery(List<Order> orders) {
         var mostProfitable = orders.stream()
                 .filter(order -> order.isHomeDelivery())
                 .max(comparingDouble(Order::getTotal)).get();
         System.out.println(mostProfitable);
-
 
         var leastProfitable = orders.stream()
                 .filter(order -> order.isHomeDelivery())
